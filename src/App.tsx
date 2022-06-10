@@ -12,6 +12,7 @@ export default function App() {
     config: {
       "Service Account JSON": string;
       "Spreadsheet ID": string;
+      "Tab Name": string;
     };
     inputEvents: {
       "Append Row": string;
@@ -21,6 +22,7 @@ export default function App() {
   const {
     "Service Account JSON": serviceAccountJson,
     "Spreadsheet ID": spreadsheetId,
+    "Tab Name": tabName,
   } = useCogsConfig(connection);
 
   const [ready, setReady] = useState(false);
@@ -51,15 +53,6 @@ export default function App() {
     }
   }, [serviceAccountJson]);
 
-  useEffect(() => {
-    (async () => {
-      // const auth = new Auth.GoogleAuth({
-      //   keyFilename: "PATH_TO_SERVICE_ACCOUNT_KEY.json",
-      // });
-      // const authClient = await auth.getClient();
-    })();
-  }, []);
-
   const appendRow = useCallback(
     (rowString: string) => {
       const row = rowString.split(",");
@@ -68,7 +61,7 @@ export default function App() {
       gapi.client.sheets.spreadsheets.values
         .append({
           spreadsheetId: spreadsheetId,
-          range: "Sheet1!A1:E",
+          range: `${tabName}!A1:E`,
           resource: {
             values: [row],
           },
@@ -80,7 +73,7 @@ export default function App() {
           );
         });
     },
-    [spreadsheetId]
+    [spreadsheetId, tabName]
   );
 
   useCogsEvent(connection, "Append Row", appendRow);

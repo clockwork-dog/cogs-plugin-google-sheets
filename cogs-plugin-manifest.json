@@ -9,6 +9,10 @@
     {
       "name": "Spreadsheet ID",
       "value": { "type": "string" }
+    },
+    {
+      "name": "Tab Name",
+      "value": { "type": "string" }
     }
   ],
   "events": {
