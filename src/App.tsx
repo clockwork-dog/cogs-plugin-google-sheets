@@ -6,6 +6,7 @@ import {
 } from "@clockworkdog/cogs-client-react";
 import React, { useCallback, useEffect, useState } from "react";
 import "./App.css";
+import getAccessTokenFromServiceAccount from "./getAccessTokenFromServiceAccount";
 
 export default function App() {
   const connection = useCogsConnection<{
@@ -34,9 +35,9 @@ export default function App() {
       serviceAccount.scopes = ["https://www.googleapis.com/auth/spreadsheets"];
 
       (async () => {
-        const accessToken = await (
-          window as any
-        ).GetAccessTokenFromServiceAccount(serviceAccount);
+        const accessToken = await getAccessTokenFromServiceAccount(
+          serviceAccount
+        );
 
         gapi.load("client", async () => {
           gapi.auth.setToken(accessToken);
