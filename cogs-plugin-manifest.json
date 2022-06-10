@@ -1,0 +1,23 @@
+{
+  "name": "Google Sheets",
+  "version": "0.1",
+  "description": "Add data to a Google Sheet",
+  "icon": "border-all",
+  "indexPath": "build/index.html",
+  "config": [
+    { "name": "Service Account JSON", "value": { "type": "string" } },
+    {
+      "name": "Spreadsheet ID",
+      "value": { "type": "string" }
+    }
+  ],
+  "events": {
+    "fromCogs": [
+      {
+        "name": "Append Row",
+        "value": { "type": "string" }
+      }
+    ],
+    "toCogs:": []
+  }
+}
