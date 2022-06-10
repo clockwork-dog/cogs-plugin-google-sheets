@@ -2,6 +2,15 @@
 
 ## How to use
 
+###
+
+- Create a Google Cloud project: https://console.cloud.google.com/apis
+- Add a Service Account: https://console.cloud.google.com/iam-admin/serviceaccounts
+- Add the email address of this Service Account as an `Editor` to the Google Sheet you want to update.
+- Enable the Google Sheet API: https://console.cloud.google.com/marketplace/product/google/sheets.googleapis.com
+
+### Install the plugin
+
 - Download the plugin from [Releases](https://github.com/clockwork-dog/cogs-plugin-google-sheets/releases/latest)
 - Unzip into the `plugins` folder in your COGS project
 - In COGS, open the project and go to `Setup` > `Settings` and enable `Hue Control`

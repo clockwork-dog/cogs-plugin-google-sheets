@@ -1,18 +1,94 @@
-import React from "react";
 import {
+  useCogsConfig,
   useCogsConnection,
+  useCogsEvent,
   useIsConnected,
 } from "@clockworkdog/cogs-client-react";
-
+import React, { useCallback, useEffect, useState } from "react";
 import "./App.css";
 
 export default function App() {
-  const connection = useCogsConnection();
+  const connection = useCogsConnection<{
+    config: {
+      "Service Account JSON": string;
+      "Spreadsheet ID": string;
+    };
+    inputEvents: {
+      "Append Row": string;
+    };
+  }>();
   const isConnected = useIsConnected(connection);
+  const {
+    "Service Account JSON": serviceAccountJson,
+    "Spreadsheet ID": spreadsheetId,
+  } = useCogsConfig(connection);
+
+  const [ready, setReady] = useState(false);
+
+  // Authenticate with Google Sheets
+  useEffect(() => {
+    if (serviceAccountJson) {
+      const serviceAccount = JSON.parse(serviceAccountJson);
+      serviceAccount.scopes = ["https://www.googleapis.com/auth/spreadsheets"];
+
+      (async () => {
+        const accessToken = await (
+          window as any
+        ).GetAccessTokenFromServiceAccount(serviceAccount);
+
+        gapi.load("client", async () => {
+          gapi.auth.setToken(accessToken);
+
+          await gapi.client.init({
+            discoveryDocs: [
+              "https://sheets.googleapis.com/$discovery/rest?version=v4",
+            ],
+          });
+
+          setReady(true);
+        });
+      })();
+    }
+  }, [serviceAccountJson]);
+
+  useEffect(() => {
+    (async () => {
+      // const auth = new Auth.GoogleAuth({
+      //   keyFilename: "PATH_TO_SERVICE_ACCOUNT_KEY.json",
+      // });
+      // const authClient = await auth.getClient();
+    })();
+  }, []);
+
+  const appendRow = useCallback(
+    (rowString: string) => {
+      const row = rowString.split(",");
+      console.log(row);
+
+      gapi.client.sheets.spreadsheets.values
+        .append({
+          spreadsheetId: spreadsheetId,
+          range: "Sheet1!A1:E",
+          resource: {
+            values: [row],
+          },
+          valueInputOption: "USER_ENTERED",
+        })
+        .then((response) => {
+          console.log(
+            `${response.result.updates?.updatedCells} cells appended.`
+          );
+        });
+    },
+    [spreadsheetId]
+  );
+
+  useCogsEvent(connection, "Append Row", appendRow);
 
   return (
     <div className="App">
-      <div>Connected: {isConnected.toString()}</div>
+      <div>{!isConnected && "Not connected"}</div>
+      <div>{isConnected && !ready && "Loading..."}</div>
     </div>
   );
 }
