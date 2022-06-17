@@ -21,14 +21,14 @@ jobs:
       - run: yarn
       - run: yarn build
       - working-directory: build
-        run: zip -r dog.clockwork.cogs.plugin.google-sheets.zip dog.clockwork.cogs.plugin.google-sheets
+        run: zip -r dog.clockwork.google-sheets.zip dog.clockwork.google-sheets
       - uses: actions/upload-artifact@v1
         with:
-          name: dog.clockwork.cogs.plugin.google-sheets.zip
-          path: build/dog.clockwork.cogs.plugin.google-sheets.zip
+          name: dog.clockwork.google-sheets.zip
+          path: build/dog.clockwork.google-sheets.zip
       - uses: ncipollo/release-action@v1
         if: startsWith(github.ref, 'refs/tags/v')
         with:
           allowUpdates: true
-          artifacts: dog.clockwork.cogs.plugin.google-sheets.zip
+          artifacts: dog.clockwork.google-sheets.zip
           token: ${{ secrets.GITHUB_TOKEN }}
