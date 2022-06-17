@@ -4,9 +4,14 @@ import {
   useCogsEvent,
   useIsConnected,
 } from "@clockworkdog/cogs-client-react";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo } from "react";
 import "./App.css";
-import getAccessTokenFromServiceAccount from "./getAccessTokenFromServiceAccount";
+import useGoogleApi from "./googleApi";
+
+const GOOGLE_API_SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
+const GOOGLE_API_DISCOVERY_DOCS = [
+  "https://sheets.googleapis.com/$discovery/rest?version=v4",
+];
 
 export default function App() {
   const connection = useCogsConnection<{
@@ -26,40 +31,28 @@ export default function App() {
     "Tab Name": tabName,
   } = useCogsConfig(connection);
 
-  const [ready, setReady] = useState(false);
+  const serviceAccount = useMemo(
+    () => (serviceAccountJson ? JSON.parse(serviceAccountJson) : undefined),
+    [serviceAccountJson]
+  );
 
-  // Authenticate with Google Sheets
-  useEffect(() => {
-    if (serviceAccountJson) {
-      const serviceAccount = JSON.parse(serviceAccountJson);
-      serviceAccount.scopes = ["https://www.googleapis.com/auth/spreadsheets"];
-
-      (async () => {
-        const accessToken = await getAccessTokenFromServiceAccount(
-          serviceAccount
-        );
-
-        gapi.load("client", async () => {
-          gapi.auth.setToken(accessToken);
-
-          await gapi.client.init({
-            discoveryDocs: [
-              "https://sheets.googleapis.com/$discovery/rest?version=v4",
-            ],
-          });
-
-          setReady(true);
-        });
-      })();
-    }
-  }, [serviceAccountJson]);
+  const googleApi = useGoogleApi({
+    discoveryDocs: GOOGLE_API_DISCOVERY_DOCS,
+    scopes: GOOGLE_API_SCOPES,
+    serviceAccount,
+  });
 
   const appendRow = useCallback(
     (rowString: string) => {
       const row = rowString.split(",");
       console.log(row);
 
-      gapi.client.sheets.spreadsheets.values
+      if (!googleApi) {
+        console.warn("Google API not loaded yet");
+        return;
+      }
+
+      googleApi.client.sheets.spreadsheets.values
         .append({
           spreadsheetId: spreadsheetId,
           range: `${tabName}!A1:E`,
@@ -74,7 +67,7 @@ export default function App() {
           );
         });
     },
-    [spreadsheetId, tabName]
+    [spreadsheetId, tabName, googleApi]
   );
 
   useCogsEvent(connection, "Append Row", appendRow);
@@ -82,7 +75,7 @@ export default function App() {
   return (
     <div className="App">
       <div>{!isConnected && "Not connected"}</div>
-      <div>{isConnected && !ready && "Loading..."}</div>
+      <div>{isConnected && !googleApi && "Loading..."}</div>
     </div>
   );
 }

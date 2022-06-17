@@ -1,6 +1,3 @@
-// This is a Javascript library to retrieve the access token from the Google Service Account.
-// Adapted from  https://github.com/tanaikech/GetAccessTokenFromServiceAccount_js
-
 import { JSEncrypt } from "jsencrypt";
 import CryptoJS from "crypto-js";
 
@@ -14,9 +11,19 @@ export interface ServiceAccountJson {
   client_email: string;
 }
 
+export interface GoogleApiAccessToken {
+  access_token: string;
+  expires_in: number;
+  token_type: "Bearer";
+}
+
+/**
+ * Retrieve the access token from the Google Service Account.
+ * Adapted from  https://github.com/tanaikech/GetAccessTokenFromServiceAccount_js
+ */
 export default async function getAccessTokenFromServiceAccount(
   serviceAccountJson: ServiceAccountJson
-) {
+): Promise<GoogleApiAccessToken> {
   const { private_key, client_email, scopes } = serviceAccountJson;
   if (!private_key || !client_email || !scopes) {
     throw new Error(
