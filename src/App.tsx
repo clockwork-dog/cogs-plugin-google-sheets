@@ -56,7 +56,9 @@ export default function App() {
 
   const appendRow = useCallback(
     (rowString: string) => {
-      const row = rowString.split(",");
+      const row = rowString
+        .split(/[^\\],/)
+        .map((cell) => cell.replaceAll("\\,", ","));
       console.log(row);
 
       gapi.client.sheets.spreadsheets.values
