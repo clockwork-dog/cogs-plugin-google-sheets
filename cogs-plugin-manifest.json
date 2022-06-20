@@ -1,9 +1,8 @@
 {
   "name": "Google Sheets",
-  "version": "0.1",
+  "version": "0.2.0",
   "description": "Add data to a Google Sheet",
   "icon": "border-all",
-  "indexPath": "build/index.html",
   "config": [
     { "name": "Service Account JSON", "value": { "type": "string" } },
     {
