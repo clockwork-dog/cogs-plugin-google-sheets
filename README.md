@@ -2,20 +2,25 @@
 
 ## How to use
 
-###
+### Google Account setup
 
-- Create a Google Cloud project: https://console.cloud.google.com/apis
-- Add a Service Account: https://console.cloud.google.com/iam-admin/serviceaccounts
+- Create a Google Cloud project, if you haven't already: https://console.cloud.google.com/apis
+- Add a new Service Account to the project: https://console.cloud.google.com/iam-admin/serviceaccounts
 - Add the email address of this Service Account as an `Editor` to the Google Sheet you want to update.
+- Create new API key for the service account by clicking on the email address in the Service Accounts list, then clicking the 'KEYS' -> 'ADD KEY' -> 'Create New Key' and pick the 'JSON' type.
 - Enable the Google Sheet API: https://console.cloud.google.com/marketplace/product/google/sheets.googleapis.com
+
 
 ### Install the plugin
 
 - Download the plugin from [Releases](https://github.com/clockwork-dog/cogs-plugin-google-sheets/releases/latest)
 - Unzip into the `plugins` folder in your COGS project
-- In COGS, open the project and go to `Setup` > `Settings` and enable `Hue Control`
-- Click the `Hue Control` icon that appears on the left
-- Set your API key and local IP address for your Philips Hue bridge
+- In COGS, open the project and go to `Setup` > `Settings` and enable `Google Sheets`
+- Click the `Google Sheets` icon that appears on the left
+- Setup the config for the plugin:
+    - **Service Account JSON**: Copy the entire contents of the JSON key you created earlier into here
+    - **Spreadsheet ID**: Copy the ID of the spreadsheet you want to update here. The ID can be found by looking at the URL when editing the spreadsheet. The ID is in the URL between `/spreadsheets/d/` and `/edit`
+     - **Tab Name**: The tab name within the spreadsheet that you wish to add rows to. In a brand new spreadsheet this is usually "Sheet1"
 
 You can now use the `Google Sheets: Append Row` action in your behaviours.
 
