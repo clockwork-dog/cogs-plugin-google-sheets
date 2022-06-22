@@ -4,7 +4,7 @@ const lexer = moo.compile({
   cell: {
     match: /(?:\\,|[^,])+/,
     lineBreaks: true,
-    value: (str) => str.replace(/\\,/g, ","),
+    value: (str) => str.replace(/\\,/g, ",").replace(/\\n/, "\n"),
   },
   comma: ",",
 });
