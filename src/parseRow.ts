@@ -10,7 +10,13 @@ const lexer = moo.compile({
 });
 
 export default function parseRow(row: string): string[] {
-  return Array.from(lexer.reset(row))
+  const tokens = Array.from(lexer.reset(row));
+  return tokens
+    .flatMap((token, index) =>
+      token.type === "comma" && tokens[index + 1]?.type === "comma"
+        ? [token, { type: "cell", value: "" } as const]
+        : [token]
+    )
     .filter((token) => token.type === "cell")
     .map((token) => token.value);
 }
