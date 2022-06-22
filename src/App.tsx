@@ -7,6 +7,7 @@ import {
 import { useCallback, useMemo } from "react";
 import "./App.css";
 import useGoogleApi from "./googleApi";
+import parseRow from "./parseRow";
 
 const GOOGLE_API_SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 const GOOGLE_API_DISCOVERY_DOCS = [
@@ -44,9 +45,8 @@ export default function App() {
 
   const appendRow = useCallback(
     (rowString: string) => {
-      const row = rowString
-        .split(/[^\\],/)
-        .map((cell) => cell.replaceAll("\\,", ","));
+      const row = parseRow(rowString);
+
       console.log(row);
 
       if (!googleApi) {
