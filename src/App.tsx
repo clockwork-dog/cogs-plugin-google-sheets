@@ -33,7 +33,14 @@ export default function App() {
   } = useCogsConfig(connection);
 
   const serviceAccount = useMemo(
-    () => (serviceAccountJson ? JSON.parse(serviceAccountJson) : undefined),
+    () => {
+      try {
+        return (serviceAccountJson ? JSON.parse(serviceAccountJson) : undefined)
+      } catch (error) {
+        console.warn(`Could not parse Service Account JSON: "${serviceAccountJson}"`, error)
+        return undefined;
+      }
+    },
     [serviceAccountJson]
   );
 
