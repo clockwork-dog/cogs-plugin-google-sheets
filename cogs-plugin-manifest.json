@@ -1,24 +1,35 @@
 {
   "name": "Google Sheets",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Add data to a Google Sheet",
   "icon": "border-all",
   "config": [
-    { "name": "Service Account JSON", "value": { "type": "string" } },
+    {
+      "name": "Service Account JSON",
+      "value": {
+        "type": "string"
+      }
+    },
     {
       "name": "Spreadsheet ID",
-      "value": { "type": "string" }
+      "value": {
+        "type": "string"
+      }
     },
     {
       "name": "Tab Name",
-      "value": { "type": "string" }
+      "value": {
+        "type": "string"
+      }
     }
   ],
   "events": {
     "fromCogs": [
       {
         "name": "Append Row",
-        "value": { "type": "string" }
+        "value": {
+          "type": "string"
+        }
       }
     ],
     "toCogs:": []
