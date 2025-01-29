@@ -1,9 +1,9 @@
 {
   "name": "cogs-plugin-google-sheets",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": true,
   "dependencies": {
-    "@clockworkdog/cogs-client-react": "1",
+    "@clockworkdog/cogs-client-react": "^1.5.7",
     "crypto-js": "^4.1.1",
     "jsencrypt": "^3.2.1",
     "moo": "^0.5.1",
