@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 16.x
@@ -22,7 +22,7 @@ jobs:
       - run: yarn build
       - working-directory: build
         run: zip -r dog.clockwork.google-sheets.zip dog.clockwork.google-sheets
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v4
         with:
           name: dog.clockwork.google-sheets.zip
           path: build/dog.clockwork.google-sheets.zip
