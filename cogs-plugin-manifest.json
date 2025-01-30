@@ -1,6 +1,6 @@
 {
   "name": "Google Sheets",
-  "version": "0.2.2",
+  "version": "0.2.4",
   "description": "Add data to a Google Sheet",
   "icon": "border-all",
   "config": [
